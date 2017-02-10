@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ib.client.ContractDetails;
 import com.ib.client.EClientSocket;
+import com.ib.client.TickType;
 
 public class IBEWrapper extends AbstractIBEWrapper {
 
@@ -42,6 +43,10 @@ public class IBEWrapper extends AbstractIBEWrapper {
 		return contractDetailsResponse;
 	}
 
+	public void setupReqMktData() {
+		working = true;
+	}
+
 	///////////////////////////////////////////////////////////////////////////////
 	// EWrapper methods
 
@@ -57,19 +62,19 @@ public class IBEWrapper extends AbstractIBEWrapper {
 	}
 
 	public void error(Exception e) {
-		working = false;
+		completeRequest();
 		logger.error("A generic error occurred on request processing", e);
 		throw new RuntimeException(e);
 	}
 
 	public void error(String str) {
-		working = false;
+		completeRequest();
 		logger.error("An error occurred on request processing, errorMsg:[{}]", str);
 		throw new UnsupportedOperationException();
 	}
 
 	public void error(int id, int errorCode, String errorMsg) {
-		working = false;
+		completeRequest();
 		logger.error("An error occurred on request processing, ID:[{}], errorCode:[{}], errorMsg:[{}]", new Object[] { id, errorCode, errorMsg });
 	}
 
@@ -83,6 +88,47 @@ public class IBEWrapper extends AbstractIBEWrapper {
 	public void contractDetailsEnd(int reqId) {
 		completeRequest();
 	}
+
+	@Override
+	public void tickGeneric(int tickerId, int tickType, double value) {
+		logger.info("tickGeneric: {} {}", TickType.get(tickType), value);
+	}
+
+	@Override
+	public void tickString(int tickerId, int tickType, String value) {
+		logger.info("tickString: {} {}", TickType.get(tickType), value);
+	}
+
+	@Override
+	public void tickPrice(int tickerId, int field, double price, int canAutoExecute) {
+		logger.info("tickPrice: field {} - price {} - canAutoExecute {}", new Object[] { TickType.get(field), price, canAutoExecute });
+	}
+
+	@Override
+	public void tickSize(int tickerId, int field, int size) {
+		logger.info("tickSize: field {} - size {}", TickType.get(field), size);
+	}
+
+	@Override
+	public void tickOptionComputation(int tickerId, int field, double impliedVol, double delta, double optPrice, double pvDividend, double gamma, double vega,
+			double theta, double undPrice) {
+		logger.info("tickOptionComputation: field {} - impliedVol {} - delta {} - optPrice {} - pvDividend {} - gamma {} - vega {} - theta {} - undPrice {}",
+			new Object[] { TickType.get(field), impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice});
+	}
+
+	@Override
+	public void tickEFP(int tickerId, int tickType, double basisPoints, String formattedBasisPoints, double impliedFuture, int holdDays,
+			String futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate) {
+		logger.info("tickEFP: {} {}", TickType.get(tickType), basisPoints);
+	}
+
+	@Override
+	public void tickSnapshotEnd(int reqId) {
+		completeRequest();
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	// Commons and private
 
 	@Override
 	public void managedAccounts(String accountsList) {

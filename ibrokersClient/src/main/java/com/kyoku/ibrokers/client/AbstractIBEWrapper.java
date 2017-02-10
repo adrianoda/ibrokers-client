@@ -13,42 +13,6 @@ import com.ib.client.OrderState;
 import com.ib.client.SoftDollarTier;
 
 public abstract class AbstractIBEWrapper implements EWrapper {
-	@Override
-	public void tickPrice(int tickerId, int field, double price, int canAutoExecute) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void tickSize(int tickerId, int field, int size) {
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void tickOptionComputation(int tickerId, int field, double impliedVol, double delta, double optPrice, double pvDividend, double gamma, double vega,
-			double theta, double undPrice) {
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void tickGeneric(int tickerId, int tickType, double value) {
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void tickString(int tickerId, int tickType, String value) {
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void tickEFP(int tickerId, int tickType, double basisPoints, String formattedBasisPoints, double impliedFuture, int holdDays,
-			String futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate) {
-		throw new UnsupportedOperationException();
-
-	}
 
 	@Override
 	public void openOrder(int orderId, Contract contract, Order order, OrderState orderState) {
@@ -172,12 +136,6 @@ public abstract class AbstractIBEWrapper implements EWrapper {
 
 	@Override
 	public void deltaNeutralValidation(int reqId, DeltaNeutralContract underComp) {
-		throw new UnsupportedOperationException();
-
-	}
-
-	@Override
-	public void tickSnapshotEnd(int reqId) {
 		throw new UnsupportedOperationException();
 
 	}

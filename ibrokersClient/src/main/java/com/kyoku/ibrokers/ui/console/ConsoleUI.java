@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 
 import com.ib.client.Contract;
 import com.ib.client.ContractDetails;
+import com.ib.client.Types.Right;
 import com.kyoku.ibrokers.client.IBClient;
 
 public class ConsoleUI {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ConsoleUI.class);
+	private final static int REQ_ID = 111;
 
 	public static void main(String[] args) {
 		LOGGER.info("START");
@@ -34,18 +36,24 @@ public class ConsoleUI {
 			ibClient.connect(ip, new Integer(port), 0);
 
 			Contract contract = new Contract();
-			contract.symbol("FISV");
+			contract.symbol("SPY"); // FISV SPY
 			contract.secType("OPT");
 			contract.currency("USD");
 			contract.exchange("SMART");
-			List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(211, contract);
-			if(reqContractDetails.size() > 0) {
-				writeFile(reqContractDetails);
-			}
-			// for (ContractDetails cdet : reqContractDetails) {
-			// LOGGER.info("Contract: " + cdet.toString());
-			// }
+			// contract.primaryExch("ARCA");
+			contract.right(Right.Put);
+			contract.lastTradeDateOrContractMonth("20170317"); 
+			List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(REQ_ID, contract);
 			LOGGER.info("Retrieved {} contract details", reqContractDetails.size());
+			if (reqContractDetails.size() > 0) {
+				writeFile(reqContractDetails);
+				// TODO
+				// strike price, bid, delta
+				for (ContractDetails contractDetails : reqContractDetails) {
+					contract.conid(contractDetails.conid());
+					ibClient.reqMarketData(REQ_ID, contract);
+				}
+			}
 		} catch (Throwable t) {
 			LOGGER.info("An error occurred during request processing...", t);
 		} finally {
@@ -58,14 +66,14 @@ public class ConsoleUI {
 	private static void writeFile(List<ContractDetails> reqContractDetails) throws IOException {
 		FileWriter writer = new FileWriter("contract-details.txt");
 		try {
-			for(ContractDetails cdet : reqContractDetails) {
+			for (ContractDetails cdet : reqContractDetails) {
 				writer.write(cdet.toString());
 				writer.write("**********************************************\n");
 			}
 		} finally {
 			writer.close();
 		}
-		
+
 	}
 
 }

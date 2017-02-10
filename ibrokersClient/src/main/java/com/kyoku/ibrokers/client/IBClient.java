@@ -1,5 +1,6 @@
 package com.kyoku.ibrokers.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import com.ib.client.EClientSocket;
 import com.ib.client.EJavaSignal;
 import com.ib.client.EReader;
 import com.ib.client.EReaderSignal;
+import com.ib.client.TagValue;
 
 public class IBClient {
 
@@ -65,10 +67,18 @@ public class IBClient {
 	}
 
 	public List<ContractDetails> reqContractDetails(int reqId, Contract contract) {
+		logger.info("reqContractDetails invoked, contract {}", contract);
 		List<ContractDetails> contractDetailsResponse = ewrapper.setupContractDetailsResponse();
 		clientSocket.reqContractDetails(reqId, contract);
 		ewrapper.waitRequestComplention();
 		return contractDetailsResponse;
+	}
+	
+	public void reqMarketData(int reqId, Contract contract) {
+		logger.info("reqMarketData invoked, contract {}", contract);
+		ewrapper.setupReqMktData();
+		clientSocket.reqMktData(reqId, contract, "", true, new ArrayList<TagValue>());
+		ewrapper.waitRequestComplention();
 	}
 
 }
