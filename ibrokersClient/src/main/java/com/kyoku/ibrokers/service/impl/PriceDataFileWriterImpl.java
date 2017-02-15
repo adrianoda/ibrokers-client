@@ -18,7 +18,7 @@ public class PriceDataFileWriterImpl implements PriceDataFileWriter {
 	
 	private final static String COL_SEPARATOR = ";";
 	private final static String ROW_SEPARATOR = "\n";
-	private final static String EMPTY_PRICE = "-";
+	private final static String EMPTY_PRICE = "0";
 
 	@Override
 	public void write(Contract contract, List<PriceData> priceDataList) throws IOException {

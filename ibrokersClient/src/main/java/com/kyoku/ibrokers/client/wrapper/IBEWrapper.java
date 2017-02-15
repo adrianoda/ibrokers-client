@@ -151,6 +151,7 @@ public class IBEWrapper extends AbstractIBEWrapper {
 			double theta, double undPrice) {
 		logger.debug("tickOptionComputation: field {} - impliedVol {} - delta {} - optPrice {} - pvDividend {} - gamma {} - vega {} - theta {} - undPrice {}",
 			new Object[] { TickType.get(field), impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice });
+		priceData.setDelta(delta);
 	}
 
 	@Override
