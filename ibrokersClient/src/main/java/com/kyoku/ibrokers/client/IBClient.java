@@ -13,7 +13,15 @@ import com.ib.client.EJavaSignal;
 import com.ib.client.EReader;
 import com.ib.client.EReaderSignal;
 import com.ib.client.TagValue;
+import com.kyoku.ibrokers.client.wrapper.IBEWrapper;
+import com.kyoku.ibrokers.model.PriceData;
 
+/**
+ * Handle TWS connection and requests
+ * 
+ * @author kyoku
+ *
+ */
 public class IBClient {
 
 	private final static Logger logger = LoggerFactory.getLogger(IBClient.class);
@@ -22,7 +30,14 @@ public class IBClient {
 	private EClientSocket clientSocket;
 	private IBEWrapper ewrapper;
 
-	public void connect(String host, int port, int clientId) {
+	/**
+	 * Initialize connection to TWS
+	 * @param host
+	 * @param port
+	 * @param clientId
+	 * @return
+	 */
+	public boolean connect(String host, int port, int clientId) {
 		// Setup services
 		readerSignal = new EJavaSignal();
 		ewrapper = new IBEWrapper();
@@ -35,7 +50,7 @@ public class IBClient {
 
 		if (!clientSocket.isConnected()) {
 			logger.warn("Unable to connect");
-			return;
+			return false;
 		}
 
 		// Wait for data from TWS
@@ -58,27 +73,44 @@ public class IBClient {
 		readerThread.start();
 
 		// Wait one of managedAccounts or nextValidId invocation before read anything from TWS (see documentation)
-		ewrapper.waitRequestComplention();
+		ewrapper.waitRequestCompletion();
+		return true;
 	}
 
+	/**
+	 * Disconnect from TWS
+	 */
 	public void disconnect() {
 		readerSignal.issueSignal();
 		clientSocket.eDisconnect();
 	}
 
+	/**
+	 * Request contract details of specified contract search criteria
+	 * @param reqId
+	 * @param contract
+	 * @return
+	 */
 	public List<ContractDetails> reqContractDetails(int reqId, Contract contract) {
-		logger.info("reqContractDetails invoked, contract {}", contract);
+		logger.debug("reqContractDetails invoked, contract {}", contract);
 		List<ContractDetails> contractDetailsResponse = ewrapper.setupContractDetailsResponse();
 		clientSocket.reqContractDetails(reqId, contract);
-		ewrapper.waitRequestComplention();
+		ewrapper.waitRequestCompletion();
 		return contractDetailsResponse;
 	}
 	
-	public void reqMarketData(int reqId, Contract contract) {
-		logger.info("reqMarketData invoked, contract {}", contract);
-		ewrapper.setupReqMktData();
+	/**
+	 * Request market data of specified contract
+	 * @param reqId
+	 * @param contract
+	 * @return
+	 */
+	public PriceData reqMarketData(int reqId, Contract contract) {
+		logger.debug("reqMarketData invoked, contract {}", contract);
+		PriceData priceData = ewrapper.setupReqMktData(contract);
 		clientSocket.reqMktData(reqId, contract, "", true, new ArrayList<TagValue>());
-		ewrapper.waitRequestComplention();
+		ewrapper.waitRequestCompletion();
+		return priceData;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.kyoku.ibrokers.client;
+package com.kyoku.ibrokers.client.wrapper;
 
 import java.util.Set;
 
@@ -12,6 +12,11 @@ import com.ib.client.Order;
 import com.ib.client.OrderState;
 import com.ib.client.SoftDollarTier;
 
+/**
+ * This class is used to remove unused functionalities from {@link EWrapper}
+ * @author kyoku
+ *
+ */
 public abstract class AbstractIBEWrapper implements EWrapper {
 
 	@Override
