@@ -62,7 +62,7 @@ public class ConsoleUI {
 
 				// Retrieve market data
 				if (reqContractDetails.size() > 0) {
-					List<PriceData> priceDataList = new LinkedList<>();
+					List<PriceData> priceDataList = new LinkedList<PriceData>();
 					int c = 0;
 					for (ContractDetails contractDetails : reqContractDetails) {
 						PriceData priceData = ibClient.reqMarketData(REQ_ID, contractDetails.contract());
