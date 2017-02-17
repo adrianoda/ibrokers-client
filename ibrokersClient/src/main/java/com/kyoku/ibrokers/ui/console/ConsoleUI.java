@@ -52,7 +52,7 @@ public class ConsoleUI {
 			if (connected) {
 				// Retrieve contract list
 				Contract contract = new Contract();
-				contract.symbol("SPY");
+				contract.symbol("AAL");
 				contract.secType("OPT");
 				contract.currency("USD");
 				contract.exchange("SMART");
