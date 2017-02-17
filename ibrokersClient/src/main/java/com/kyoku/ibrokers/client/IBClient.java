@@ -92,13 +92,13 @@ public class IBClient {
 	 * @return
 	 */
 	public List<ContractDetails> reqContractDetails(int reqId, Contract contract) {
-		logger.debug("reqContractDetails invoked, contract {}", contract);
+		logger.debug("[{}] - reqContractDetails invoked, contract {}", reqId, contract);
 		List<ContractDetails> contractDetailsResponse = ewrapper.setupContractDetailsResponse();
 		clientSocket.reqContractDetails(reqId, contract);
 		ewrapper.waitRequestCompletion();
 		return contractDetailsResponse;
 	}
-	
+
 	/**
 	 * Request market data of specified contract
 	 * @param reqId
@@ -106,7 +106,7 @@ public class IBClient {
 	 * @return
 	 */
 	public PriceData reqMarketData(int reqId, Contract contract) {
-		logger.debug("reqMarketData invoked, contract {}", contract);
+		logger.debug("[{}] - reqMarketData invoked, contract {}", reqId, contract);
 		PriceData priceData = ewrapper.setupReqMktData(contract);
 		clientSocket.reqMktData(reqId, contract, "", true, new ArrayList<TagValue>());
 		ewrapper.waitRequestCompletion();

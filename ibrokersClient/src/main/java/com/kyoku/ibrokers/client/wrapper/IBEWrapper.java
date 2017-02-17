@@ -117,24 +117,24 @@ public class IBEWrapper extends AbstractIBEWrapper {
 	}
 
 	public void contractDetailsEnd(int reqId) {
-		logger.debug("contractDetailsEnd");
+		logger.debug("[{}] - contractDetailsEnd", reqId);
 		completeRequest();
 	}
 
 	// MARKET REQUESTS
 	@Override
 	public void tickGeneric(int tickerId, int tickType, double value) {
-		logger.debug("tickGeneric: {} {}", TickType.get(tickType), value);
+		logger.debug("[{}] - tickGeneric: {} {}", new Object[] { tickerId, TickType.get(tickType), value });
 	}
 
 	@Override
 	public void tickString(int tickerId, int tickType, String value) {
-		logger.debug("tickString: {} {}", TickType.get(tickType), value);
+		logger.debug("[{}] - tickString: {} {}", new Object[] { tickerId, TickType.get(tickType), value });
 	}
 
 	@Override
 	public void tickPrice(int tickerId, int field, double price, int canAutoExecute) {
-		logger.debug("tickPrice: field {} - price {} - canAutoExecute {}", new Object[] { TickType.get(field), price, canAutoExecute });
+		logger.debug("[{}] - tickPrice: field {} - price {} - canAutoExecute {}", new Object[] { tickerId, TickType.get(field), price, canAutoExecute });
 		TickType tickType = TickType.get(field);
 		if (tickType == TickType.BID) {
 			priceData.setBid(price);
@@ -143,26 +143,27 @@ public class IBEWrapper extends AbstractIBEWrapper {
 
 	@Override
 	public void tickSize(int tickerId, int field, int size) {
-		logger.debug("tickSize: field {} - size {}", TickType.get(field), size);
+		logger.debug("[{}] - tickSize: field {} - size {}", new Object[] { tickerId, TickType.get(field), size });
 	}
 
 	@Override
 	public void tickOptionComputation(int tickerId, int field, double impliedVol, double delta, double optPrice, double pvDividend, double gamma, double vega,
 			double theta, double undPrice) {
-		logger.debug("tickOptionComputation: field {} - impliedVol {} - delta {} - optPrice {} - pvDividend {} - gamma {} - vega {} - theta {} - undPrice {}",
-			new Object[] { TickType.get(field), impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice });
+		logger.debug(
+			"[{}] - tickOptionComputation: field {} - impliedVol {} - delta {} - optPrice {} - pvDividend {} - gamma {} - vega {} - theta {} - undPrice {}",
+			new Object[] { tickerId, TickType.get(field), impliedVol, delta, optPrice, pvDividend, gamma, vega, theta, undPrice });
 		priceData.setDelta(delta);
 	}
 
 	@Override
 	public void tickEFP(int tickerId, int tickType, double basisPoints, String formattedBasisPoints, double impliedFuture, int holdDays,
 			String futureLastTradeDate, double dividendImpact, double dividendsToLastTradeDate) {
-		logger.debug("tickEFP: {} {}", TickType.get(tickType), basisPoints);
+		logger.debug("[{}] - tickEFP: {} {}", new Object[] { tickerId, TickType.get(tickType), basisPoints });
 	}
 
 	@Override
 	public void tickSnapshotEnd(int reqId) {
-		logger.debug("tickSnapshotEnd");
+		logger.debug("[{}] - tickSnapshotEnd", reqId);
 		completeRequest();
 	}
 
