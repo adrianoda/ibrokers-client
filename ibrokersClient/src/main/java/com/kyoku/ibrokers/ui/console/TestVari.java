@@ -29,15 +29,15 @@ public class TestVari {
 			}
 		});
 		t.start();
-		
-//		System.out.println("thread 1 WAITING");
-//		synchronized (stringList) {
-//			stringList.wait();
-//		}
-//		System.out.println("thread 1 stringList size" + stringList.size());
-		
-		t.interrupt();
-		
+
+		System.out.println("thread 1 WAITING");
+		synchronized (stringList) {
+			stringList.wait();
+		}
+		System.out.println("thread 1 stringList size" + stringList.size());
+
+//		t.interrupt();
+
 		System.out.println("thread 1 END");
 	}
 
