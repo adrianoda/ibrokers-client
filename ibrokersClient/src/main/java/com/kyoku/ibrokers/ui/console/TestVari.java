@@ -30,6 +30,8 @@ public class TestVari {
 		});
 		t.start();
 		
+		System.out.println("MEOW");
+		
 //		System.out.println("thread 1 WAITING");
 //		synchronized (stringList) {
 //			stringList.wait();
