@@ -25,7 +25,7 @@ import com.kyoku.ibrokers.service.impl.PriceDataFileWriterImpl;
 public class ConsoleUI {
 
 	private final static Logger logger = LoggerFactory.getLogger(ConsoleUI.class);
-	private final static int REQ_ID = 111;
+	private static int REQ_ID = 111;
 
 	private IBClient ibClient = new IBClient();
 	private PriceDataFileWriter priceDataFileWriter = new PriceDataFileWriterImpl();
@@ -51,7 +51,7 @@ public class ConsoleUI {
 			if (connected) {
 				// Retrieve contract list
 				Contract contract = new Contract();
-				contract.symbol("SPY");
+				contract.symbol("AAL");
 				contract.secType("OPT");
 				contract.currency("USD");
 				contract.exchange("SMART");
@@ -68,6 +68,7 @@ public class ConsoleUI {
 						PriceData priceData = ibClient.reqMarketData(REQ_ID, contractDetails.contract());
 						priceDataList.add(priceData);
 						logger.info("processing request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
+						REQ_ID++;
 					}
 					priceDataList.sort(new Comparator<PriceData>() {
 						@Override
