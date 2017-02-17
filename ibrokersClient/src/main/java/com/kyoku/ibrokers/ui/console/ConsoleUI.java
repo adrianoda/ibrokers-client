@@ -68,7 +68,7 @@ public class ConsoleUI {
 						PriceData priceData = ibClient.reqMarketData(REQ_ID, contractDetails.contract());
 						priceDataList.add(priceData);
 						logger.info("processing request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
-						REQ_ID++; // Questa la riga che ho aggiuntojgghjgh
+						REQ_ID++; // Questa la riga che ho aggiunto
 					}
 					priceDataList.sort(new Comparator<PriceData>() {
 						@Override
