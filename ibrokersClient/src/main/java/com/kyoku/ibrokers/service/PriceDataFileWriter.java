@@ -1,7 +1,7 @@
 package com.kyoku.ibrokers.service;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import com.ib.client.Contract;
 import com.kyoku.ibrokers.model.PriceData;
@@ -19,6 +19,6 @@ public interface PriceDataFileWriter {
 	 * @param priceDataList
 	 * @throws IOException
 	 */
-	void write(Contract contract, List<PriceData> priceDataList) throws IOException;
+	void write(Contract contract, Set<PriceData> priceDataList) throws IOException;
 
 }

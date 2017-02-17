@@ -4,6 +4,7 @@ import com.ib.client.Contract;
 
 /**
  * Hold contract data and related price info
+ * 
  * @author kyoku
  *
  */
@@ -69,7 +70,6 @@ public class PriceData implements Comparable<PriceData> {
 
 	// OTHER
 
-
 	@Override
 	public String toString() {
 		return "PriceData [getSymbol()="
@@ -97,5 +97,5 @@ public class PriceData implements Comparable<PriceData> {
 	public int compareTo(PriceData o) {
 		return getStrike().compareTo(o.getStrike());
 	}
-	
+
 }

@@ -1,9 +1,10 @@
 package com.kyoku.ibrokers.ui.console;
 
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,10 @@ import com.kyoku.ibrokers.service.impl.PriceDataFileWriterImpl;
 public class ConsoleUI {
 
 	private final static Logger logger = LoggerFactory.getLogger(ConsoleUI.class);
-	private final static int REQ_ID = 111;
 
 	private IBClient ibClient = new IBClient();
 	private PriceDataFileWriter priceDataFileWriter = new PriceDataFileWriterImpl();
+	private Random reqIdGenerator = new Random();
 
 	public static void main(String[] args) {
 		ConsoleUI consoleUI = new ConsoleUI();
@@ -57,24 +58,19 @@ public class ConsoleUI {
 				contract.exchange("SMART");
 				contract.right(Right.Put);
 				contract.lastTradeDateOrContractMonth("20170317");
-				List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(REQ_ID, contract);
+				int reqId = reqIdGenerator.nextInt();
+				List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(reqId += 1, contract);
 				logger.info("Retrieved {} contract details", reqContractDetails.size());
 
 				// Retrieve market data
 				if (reqContractDetails.size() > 0) {
-					List<PriceData> priceDataList = new LinkedList<PriceData>();
+					Set<PriceData> priceDataList = new TreeSet<PriceData>();
 					int c = 0;
 					for (ContractDetails contractDetails : reqContractDetails) {
-						PriceData priceData = ibClient.reqMarketData(REQ_ID, contractDetails.contract());
+						PriceData priceData = ibClient.reqMarketData(reqId += 1, contractDetails.contract());
 						priceDataList.add(priceData);
 						logger.info("processing request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
 					}
-					priceDataList.sort(new Comparator<PriceData>() {
-						@Override
-						public int compare(PriceData o1, PriceData o2) {
-							return o1.compareTo(o2);
-						}
-					});
 					priceDataFileWriter.write(contract, priceDataList);
 				}
 			}

@@ -2,7 +2,7 @@ package com.kyoku.ibrokers.service.impl;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import com.ib.client.Contract;
 import com.kyoku.ibrokers.model.PriceData;
@@ -21,7 +21,7 @@ public class PriceDataFileWriterImpl implements PriceDataFileWriter {
 	private final static String EMPTY_PRICE = "0";
 
 	@Override
-	public void write(Contract contract, List<PriceData> priceDataList) throws IOException {
+	public void write(Contract contract, Set<PriceData> priceDataList) throws IOException {
 		String fileName = contract.symbol() + contract.lastTradeDateOrContractMonth() + contract.right() + ".csv";
 		FileWriter writer = new FileWriter(fileName);		
 		try {
