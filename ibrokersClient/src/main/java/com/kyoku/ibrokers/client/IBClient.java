@@ -15,6 +15,8 @@ import com.ib.client.EReaderSignal;
 import com.ib.client.TagValue;
 import com.kyoku.ibrokers.client.wrapper.IBEWrapper;
 import com.kyoku.ibrokers.model.PriceData;
+import com.kyoku.ibrokers.service.RequestIdGenerator;
+import com.kyoku.ibrokers.service.impl.RequestIdGeneratorImpl;
 
 /**
  * Handle TWS connection and requests
@@ -25,6 +27,8 @@ import com.kyoku.ibrokers.model.PriceData;
 public class IBClient {
 
 	private final static Logger logger = LoggerFactory.getLogger(IBClient.class);
+
+	private RequestIdGenerator requestIdGenerator = RequestIdGeneratorImpl.getInstance();
 
 	private EReaderSignal readerSignal;
 	private EClientSocket clientSocket;
@@ -91,7 +95,8 @@ public class IBClient {
 	 * @param contract
 	 * @return
 	 */
-	public List<ContractDetails> reqContractDetails(int reqId, Contract contract) {
+	public List<ContractDetails> reqContractDetails(Contract contract) {
+		int reqId = requestIdGenerator.nextId();
 		logger.debug("[{}] - reqContractDetails invoked, contract {}", reqId, contract);
 		List<ContractDetails> contractDetailsResponse = ewrapper.setupContractDetailsResponse();
 		clientSocket.reqContractDetails(reqId, contract);
@@ -105,7 +110,8 @@ public class IBClient {
 	 * @param contract
 	 * @return
 	 */
-	public PriceData reqMarketData(int reqId, Contract contract) {
+	public PriceData reqMarketData(Contract contract) {
+		int reqId = requestIdGenerator.nextId();
 		logger.debug("[{}] - reqMarketData invoked, contract {}", reqId, contract);
 		PriceData priceData = ewrapper.setupReqMktData(contract);
 		clientSocket.reqMktData(reqId, contract, "", true, new ArrayList<TagValue>());

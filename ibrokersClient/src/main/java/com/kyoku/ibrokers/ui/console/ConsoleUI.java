@@ -1,7 +1,6 @@
 package com.kyoku.ibrokers.ui.console;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,7 +28,6 @@ public class ConsoleUI {
 
 	private IBClient ibClient = new IBClient();
 	private PriceDataFileWriter priceDataFileWriter = new PriceDataFileWriterImpl();
-	private Random reqIdGenerator = new Random();
 
 	public static void main(String[] args) {
 		ConsoleUI consoleUI = new ConsoleUI();
@@ -58,8 +56,7 @@ public class ConsoleUI {
 				contract.exchange("SMART");
 				contract.right(Right.Put);
 				contract.lastTradeDateOrContractMonth("20170317");
-				int reqId = reqIdGenerator.nextInt();
-				List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(reqId += 1, contract);
+				List<ContractDetails> reqContractDetails = ibClient.reqContractDetails(contract);
 				logger.info("Retrieved {} contract details", reqContractDetails.size());
 
 				// Retrieve market data
@@ -67,9 +64,9 @@ public class ConsoleUI {
 					Set<PriceData> priceDataList = new TreeSet<PriceData>();
 					int c = 0;
 					for (ContractDetails contractDetails : reqContractDetails) {
-						PriceData priceData = ibClient.reqMarketData(reqId += 1, contractDetails.contract());
+						PriceData priceData = ibClient.reqMarketData(contractDetails.contract());
 						priceDataList.add(priceData);
-						logger.info("processing request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
+						logger.info("Processed request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
 					}
 					priceDataFileWriter.write(contract, priceDataList);
 				}
