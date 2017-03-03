@@ -17,7 +17,7 @@ import com.kyoku.ibrokers.service.PriceDataFileWriter;
 import com.kyoku.ibrokers.service.impl.PriceDataFileWriterImpl;
 
 /**
- * Console use entry point 
+ * Console user interface entry point
  * 
  * @author kyoku
  *
@@ -34,7 +34,7 @@ public class ConsoleUI {
 		consoleUI.run();
 	}
 
-	public void run() {
+	private void run() {
 		// Handle user interaction to retrieve TWS server and port
 		System.out.print("Type server address or type ENTER to use default address 127.0.0.1: ");
 		Scanner sc = new Scanner(System.in);
@@ -66,7 +66,7 @@ public class ConsoleUI {
 					for (ContractDetails contractDetails : reqContractDetails) {
 						PriceData priceData = ibClient.reqMarketData(contractDetails.contract());
 						priceDataList.add(priceData);
-						logger.info("Processed request {} of {} - {}", new Object[] { c += 1, reqContractDetails.size(), priceData });
+						logger.info("Processed request {} of {} - {}", c += 1, reqContractDetails.size(), priceData);
 					}
 					priceDataFileWriter.write(contract, priceDataList);
 				}
